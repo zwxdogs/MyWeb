@@ -48,7 +48,23 @@
 
 <!-- 每关闭一张票补一行：一行摘要 + 链接指向票里的详细答案 -->
 
-- [EdgeOne Pages 构建 Astro 静态站的配置要求](issues/01-edgeone-astro-build.md)：输出目录必须手填 `dist`（平台默认是根目录）、Node 选 24.18.0、纯静态不装 adapter、区域创建时选「全球可用区（不含大陆）」。**并查出一条推翻原决定的事实：平台免费二级域名对大陆访客仅 3 小时有效，故必须购买自定义域名（但无需备案）。**
+- [EdgeOne Pages 构建 Astro 静态站的配置要求](https://github.com/zwxdogs/MyWeb/issues/2)：输出目录必须手填 `dist`（平台默认是根目录）、Node 选 24.18.0、纯静态不装 adapter、区域创建时选「全球可用区（不含大陆）」。**并查出一条推翻原决定的事实：平台免费二级域名对大陆访客仅 3 小时有效，故必须购买自定义域名（但无需备案）。**
+
+## 工单（GitHub Issues）
+
+本图的权威工单在 GitHub Issues，仓库内 `.scratch/` 保留副本供离线阅读。
+
+| GitHub | 类型 | 依赖 | 工单 |
+| --- | --- | --- | --- |
+| [#1](https://github.com/zwxdogs/MyWeb/issues/1) | 地图 | — | 探索地图（本文的远程副本） |
+| [#2](https://github.com/zwxdogs/MyWeb/issues/2) | research | — | EdgeOne Pages 构建 Astro 静态站的配置要求 ✅ 已关闭 |
+| [#3](https://github.com/zwxdogs/MyWeb/issues/3) | grilling | — | 页面清单与 URL 结构 |
+| [#4](https://github.com/zwxdogs/MyWeb/issues/4) | grilling | #3 | 论文内容模型与文件组织 |
+| [#5](https://github.com/zwxdogs/MyWeb/issues/5) | grilling | #3 | 项目条目与分享条目的内容模型 |
+| [#6](https://github.com/zwxdogs/MyWeb/issues/6) | grilling | #3 #4 #5 | 首页四栏的内容来源与降级规则 |
+| [#7](https://github.com/zwxdogs/MyWeb/issues/7) | grilling | #3 #4 #5 #6 | 骨架的验收标准与设计稿交付形态 |
+
+**前沿（现在可动）**：#3 是唯一没有前置条件的开放票。它解决后 #4 与 #5 同时解锁。
 
 ## Not yet specified
 
