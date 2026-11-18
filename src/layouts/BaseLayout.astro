@@ -1,0 +1,59 @@
+---
+import { SITE_TITLE } from '../consts';
+import '../styles/global.css';
+
+interface Props {
+  /** 页面标题；会拼在站点标识后面。首页不传。 */
+  title?: string;
+}
+
+const { title } = Astro.props;
+
+// 四项导航，全站只在这里定义一次。
+const navItems = [
+  { href: '/', label: '首页' },
+  { href: '/papers/', label: '论文' },
+  { href: '/projects/', label: '项目' },
+  { href: '/notes/', label: '分享' },
+];
+
+// 当前路径归一化到「带尾斜杠」形式，再和导航项比较，标记 aria-current。
+const currentPath = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`;
+
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-title" href="/">{SITE_TITLE}</a>
+      <nav aria-label="站内导航">
+        <ul class="site-nav">
+          {
+            navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={currentPath === item.href ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

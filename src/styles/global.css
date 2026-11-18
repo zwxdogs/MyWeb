@@ -1,0 +1,110 @@
+/* 全站唯一一份样式。
+ *
+ * 硬约束（规格 #8 / 工单 #9）：只用 4 个变量 —— 文字色 / 背景色 / 最大宽度 / 行高。
+ * 不引 CSS 框架、不引外部字体。320 / 768 / 1440 三档宽度都不出现横向滚动。
+ */
+
+:root {
+  --color-text: #1a1a1a;
+  --color-bg: #ffffff;
+  --max-width: 42rem;
+  --line-height: 1.7;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* 任何长单词、长 URL 都允许断行，320 像素宽下也不会把页面撑出横向滚动。 */
+  overflow-wrap: break-word;
+}
+
+body {
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  max-width: var(--max-width);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans CJK SC",
+    "Microsoft YaHei", sans-serif;
+  font-size: 1rem;
+  line-height: var(--line-height);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.3;
+}
+
+h1 {
+  margin: 1.5rem 0 1rem;
+  font-size: 1.6rem;
+}
+
+h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+a {
+  color: inherit;
+}
+
+/* 只用键盘也要走得完全站，并且看得见焦点在哪。 */
+a:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* 站点头部：站点标识 + 四项导航。 */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-text);
+}
+
+.site-title {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  text-decoration: none;
+}
+
+.site-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* 列表页与首页各栏的空态句子。 */
+.empty {
+  margin: 0.5rem 0 0;
+}
+
+/* 图片永远不超过容器宽度 —— 这是三档宽度无横向滚动的主要防线。 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+nav ul,
+section {
+  min-width: 0;
+}

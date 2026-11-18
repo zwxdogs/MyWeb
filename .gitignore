@@ -1,6 +1,5 @@
 # 依赖
 node_modules/
-.pnpm-store/
 
 # 构建产物
 dist/
@@ -20,7 +19,6 @@ Thumbs.db
 # 日志
 *.log
 npm-debug.log*
-pnpm-debug.log*
 
 # 临时文件
 *.tmp

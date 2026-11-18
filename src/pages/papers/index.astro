@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// 骨架期只证明「能打开」与「空态说得出话」。列表条目与排序由 #11 补齐。
+const papers = await getCollection('papers');
+---
+
+<BaseLayout title="论文">
+  <h1>论文</h1>
+  {papers.length === 0 ? <p class="empty">暂无论文。</p> : <ul>{papers.map((entry) => <li>{entry.id}</li>)}</ul>}
+</BaseLayout>
