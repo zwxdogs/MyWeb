@@ -1,0 +1,34 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+// 一篇论文在列表里的样子：封面图（第一张配图）+ 中文标题（主）+ 英文原名（次）+ venue。
+// 首页（#14）与论文列表页共用这一个组件，避免两处各写一遍然后漂移。
+//
+// 没有配图是合法的（闭源期刊不转载原图），这时整块封面不出现，不占位、不留白。
+interface Props {
+  paper: CollectionEntry<'papers'>;
+}
+
+const { paper } = Astro.props;
+const { title_zh, title_en, venue, figures } = paper.data;
+const cover = figures[0];
+---
+
+<li class="paper-item">
+  {
+    /*
+      封面**不包链接**。包了就有两条通往同一页的链接，读屏会把同一个目标读两遍；
+      而如果给链接加 aria-hidden 来消掉重复，图注（同时也是 alt）就一起被藏起来了——
+      那违反 §4.5「caption 兼作替代文字」。所以只让标题承担导航，图只承担替代文字。
+    */
+    cover && <Image class="paper-cover" src={cover.src} alt={cover.caption} loading="lazy" />
+  }
+  <div class="paper-item-body">
+    <h2 class="paper-item-title">
+      <a href={`/papers/${paper.id}/`}>{title_zh}</a>
+    </h2>
+    <p class="paper-item-title-en">{title_en}</p>
+    <p class="paper-item-venue">{venue}</p>
+  </div>
+</li>

@@ -1,0 +1,103 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSortedPapers } from '../../lib/collections';
+
+// 详情页同样走 lib/collections 的取数入口——预检因此在这个路由单独构建时也会执行。
+// getStaticPaths 里再走一遍是刻意的：静态生成器把每个路由单独跑一次，
+// 「只在一处调预检」等于另一处单独构建时没有防线。
+export async function getStaticPaths() {
+  const papers = await getSortedPapers();
+  return papers.map((paper) => ({ params: { slug: paper.id }, props: { paper } }));
+}
+
+const { paper } = Astro.props;
+const { title_zh, title_en, venue, authors, my_role, summary, doi, code_url, figures } = paper.data;
+
+// 角色徽标：只有前三种有徽标，普通作者（coauthor）无徽标——不加一个「普通作者」的牌子，
+// 那是把「什么都没发生」也标出来。
+const ROLE_BADGE: Record<typeof my_role, string | undefined> = {
+  first: '第一作者',
+  'co-first': '共同一作',
+  corresponding: '通讯作者',
+  coauthor: undefined,
+};
+const badge = ROLE_BADGE[my_role];
+
+// 简介按填写的分段渲染。契约是「`|-` 保住的换行要真的换行」：作者写一行就是一段，
+// 写空行也只是多一个要被丢掉的空段——两种写法都得到同样结果，不会因为
+// 「到底该写空行还是写换行」而产生一个静默吞掉分段的地方。
+const summaryParagraphs = summary
+  .split(/\r?\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter((paragraph) => paragraph.length > 0);
+
+// 正文可能为空（论文条目只靠 frontmatter 表达），有空内容才渲染正文区。
+const { Content } = await render(paper);
+const hasBody = (paper.body ?? '').trim().length > 0;
+---
+
+<BaseLayout title={title_zh}>
+  <article class="paper-detail">
+    <header>
+      <h1>{title_zh}</h1>
+      <p class="paper-detail-title-en">{title_en}</p>
+      <p class="paper-detail-venue">{venue}</p>
+    </header>
+
+    <p class="paper-detail-authors">
+      {
+        authors.map((author, index) => (
+          <>
+            {index > 0 && '、'}
+            {author.me ? <strong>{author.name}</strong> : author.name}
+            {author.me && badge && <span class="role-badge">{badge}</span>}
+          </>
+        ))
+      }
+    </p>
+
+    <section class="paper-detail-summary" aria-label="中文简介">
+      {summaryParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+
+    {
+      /* DOI 前缀由模板拼，内容里只存裸 DOI；两个链接都没有时整块不出现，
+         不留一空的 <ul>。 */
+    }
+    {
+      (doi || code_url) && (
+        <ul class="paper-detail-links">
+          {doi && (
+            <li>
+              <a href={`https://doi.org/${doi}`} rel="noopener">查看原文</a>
+            </li>
+          )}
+          {code_url && (
+            <li>
+              <a href={code_url} rel="noopener">代码仓库</a>
+            </li>
+          )}
+        </ul>
+      )
+    }
+
+    {
+      figures.length > 0 && (
+        <section class="paper-detail-figures" aria-label="配图">
+          {figures.map((figure) => (
+            <figure>
+              <Image src={figure.src} alt={figure.caption} loading="lazy" />
+              <figcaption>{figure.caption}</figcaption>
+            </figure>
+          ))}
+        </section>
+      )
+    }
+
+    {hasBody && <div class="paper-detail-body"><Content /></div>}
+  </article>
+
+  <p class="back-link"><a href="/papers/">← 回到论文列表</a></p>
+</BaseLayout>

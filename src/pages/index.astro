@@ -1,28 +1,31 @@
 ---
 import { getCollection } from 'astro:content';
+import { getSortedPapers } from '../lib/collections';
 import { SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EmptyState from '../components/EmptyState.astro';
+import PaperItem from '../components/PaperItem.astro';
 
-// 骨架期只有外壳与空态。个人介绍、卡片字段、取前 3 条与「查看全部 →」
-// 由 #14 组装；这里只证明「没有内容时，每一个栏目区都说得出自己为什么是空的」。
-const papers = await getCollection('papers');
-const projects = await getCollection('projects');
+// 首页的论文栏与论文列表页共用同一个取数入口（lib/collections），排序与预检都在那里。
+// 取前 3 条、「查看全部 →」与个人介绍由 #14 组装；本票只保证「同一套排序不是两个地方
+// 各写一遍」，所以这一栏现在就渲染真卡片，而不是条目标识。
+const papers = await getSortedPapers();const projects = await getCollection('projects');
 const notes = await getCollection('notes');
 ---
 
 <BaseLayout>
   <h1>{SITE_TITLE}</h1>
 
-  {
-    /*
-      非空时先只列出条目标识——它证明加载器真的找到了内容（而不是静默丢条目），
-      真正的卡片（封面图、中英文标题、会议年份）由 #11/#12/#13 各自补齐。
-    */
-  }
   <section>
     <h2>论文</h2>
-    {papers.length === 0 ? <EmptyState label="论文" /> : <ul>{papers.map((entry) => <li>{entry.id}</li>)}</ul>}
+    {
+      /*
+        论文栏与列表页共用 PaperItem 与同一套排序——这条是 #11 的验收判据：
+        「列表页与首页取数共用同一套排序，不各写一遍」。
+        取前 3 条与「查看全部 →」留给 #14。
+      */
+    }
+    {papers.length === 0 ? <EmptyState label="论文" /> : <ul class="paper-list">{papers.map((paper) => <PaperItem paper={paper} />)}</ul>}
   </section>
 
   <section>

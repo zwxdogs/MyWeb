@@ -107,3 +107,109 @@ nav ul,
 section {
   min-width: 0;
 }
+
+/* ---------- 论文列表：一条 = 封面 + 中文标题（主）+ 英文原名（次）+ venue ---------- */
+
+.paper-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paper-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-top: 1px solid var(--color-text);
+}
+
+.paper-item:first-child {
+  border-top: 0;
+}
+
+/* 封面宽度固定、不参与拉伸；没有配图时整块不渲染，也不留白。
+   封面本身不是链接（见 PaperItem.astro 的注释）：导航由标题承担，
+   图片只承担替代文字，所以这里只管尺寸。 */
+.paper-cover {
+  flex: 0 0 7rem;
+  max-width: 7rem;
+}
+
+.paper-item-body {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.paper-item-title {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.paper-item-title a {
+  text-decoration: none;
+}
+
+.paper-item-title a:hover {
+  text-decoration: underline;
+}
+
+/* 英文原名是次要行，与中文主标题同构于首页与详情页。 */
+.paper-item-title-en,
+.paper-detail-title-en {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.paper-item-venue,
+.paper-detail-venue {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- 论文详情 ---------- */
+
+.paper-detail-authors {
+  margin: 0.75rem 0 1rem;
+  font-size: 0.95rem;
+}
+
+/* 徽标只是个不抢眼的标签：它说明「这一位是你，且你是第一作者」。 */
+.role-badge {
+  display: inline-block;
+  margin-left: 0.25rem;
+  padding: 0 0.35rem;
+  border: 1px solid var(--color-text);
+  border-radius: 0.2rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  vertical-align: 0.1em;
+}
+
+.paper-detail-links {
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paper-detail-links li + li {
+  margin-top: 0.25rem;
+}
+
+.paper-detail-figures figure {
+  margin: 1.5rem 0;
+}
+
+.paper-detail-figures figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.back-link {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}

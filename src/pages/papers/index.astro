@@ -1,13 +1,15 @@
 ---
-import { getCollection } from 'astro:content';
+import { getSortedPapers } from '../../lib/collections';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EmptyState from '../../components/EmptyState.astro';
+import PaperItem from '../../components/PaperItem.astro';
 
-// 骨架期只证明「能打开」与「空态说得出话」。列表条目与排序由 #11 补齐。
-const papers = await getCollection('papers');
+// 取数走 lib/collections 的同一个入口：排序（年份降序 → 月份降序 → slug 升序）与
+// 预检都在那里，首页也调它，两处顺序不可能漂移。
+const papers = await getSortedPapers();
 ---
 
 <BaseLayout title="论文">
   <h1>论文</h1>
-  {papers.length === 0 ? <EmptyState label="论文" /> : <ul>{papers.map((entry) => <li>{entry.id}</li>)}</ul>}
+  {papers.length === 0 ? <EmptyState label="论文" /> : <ul class="paper-list">{papers.map((paper) => <PaperItem paper={paper} />)}</ul>}
 </BaseLayout>
