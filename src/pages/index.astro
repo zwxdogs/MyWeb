@@ -1,36 +1,37 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EmptyState from '../components/EmptyState.astro';
 
-// 首页在骨架期只有外壳：站点标识（在布局里）+ 四项导航 + 三个栏目区的空态。
-// 个人介绍、卡片字段、取前 3 条与「查看全部 →」由 #14 组装；这里只证明
-// 「没有内容时，每一个栏目区都说得出自己为什么是空的」。
+// 骨架期只有外壳与空态。个人介绍、卡片字段、取前 3 条与「查看全部 →」
+// 由 #14 组装；这里只证明「没有内容时，每一个栏目区都说得出自己为什么是空的」。
 const papers = await getCollection('papers');
 const projects = await getCollection('projects');
 const notes = await getCollection('notes');
 ---
 
 <BaseLayout>
-  <h1>zwxdogs 的个人网站</h1>
+  <h1>{SITE_TITLE}</h1>
 
   {
     /*
-      三个栏目区暂时只渲染标题与空态。条目真正长什么样（封面图、中英文标题、
-      会议年份）由 #11/#12/#13 逐条补齐，这里刻意不预先编造那些字段。
+      非空时先只列出条目标识——它证明加载器真的找到了内容（而不是静默丢条目），
+      真正的卡片（封面图、中英文标题、会议年份）由 #11/#12/#13 各自补齐。
     */
   }
   <section>
     <h2>论文</h2>
-    {papers.length === 0 ? <p class="empty">暂无论文。</p> : <ul>{papers.map((entry) => <li>{entry.id}</li>)}</ul>}
+    {papers.length === 0 ? <EmptyState label="论文" /> : <ul>{papers.map((entry) => <li>{entry.id}</li>)}</ul>}
   </section>
 
   <section>
     <h2>项目</h2>
-    {projects.length === 0 ? <p class="empty">暂无项目。</p> : <ul>{projects.map((entry) => <li>{entry.id}</li>)}</ul>}
+    {projects.length === 0 ? <EmptyState label="项目" /> : <ul>{projects.map((entry) => <li>{entry.id}</li>)}</ul>}
   </section>
 
   <section>
     <h2>分享</h2>
-    {notes.length === 0 ? <p class="empty">暂无分享。</p> : <ul>{notes.map((entry) => <li>{entry.id}</li>)}</ul>}
+    {notes.length === 0 ? <EmptyState label="分享" /> : <ul>{notes.map((entry) => <li>{entry.id}</li>)}</ul>}
   </section>
 </BaseLayout>
